@@ -5,7 +5,11 @@ import VideoThumbnail from './VideoThumbnail'
 import About from './About';
 
 export default function Home(props) {
-    let pageContent = <About />
+    let pageContent = 
+            <div className='container'>
+                <h3>Search for videos above!</h3>
+                <About />
+            </div>
     if (props.availableResults) {
       pageContent = props.searchResult.map(result => 
         <div className='col-sm-6'>
@@ -15,7 +19,6 @@ export default function Home(props) {
                 url={result.snippet.thumbnails.medium.url}
                 title={result.snippet.title}
                 id={result.id.videoId}
-                handleVideoSelection={props.handleVideoSelection}
                 />
             </Link>
         </div>

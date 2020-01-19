@@ -62,11 +62,6 @@ class App extends React.PureComponent {
     this.setState({search: ''})
   }
 
-  handleVideoSelection = (id) => {
-    console.log('VIDEO ID: ',id)
-    this.setState({targetVideoId: id})
-  }
-
   render() {
     return (
       <div className="App">
@@ -85,7 +80,6 @@ class App extends React.PureComponent {
                   handleInitSearch = {this.handleInitSearch}
                   availableResults = {this.state.availableResults}
                   searchResult = {this.state.searchResult}
-                  handleVideoSelection = {this.handleVideoSelection}
                   {...props} />
             )} />
           <Route path='/video' render={props => (
