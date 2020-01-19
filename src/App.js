@@ -6,6 +6,7 @@ import axios from 'axios';
 import Home from './components/Home';
 import Video from './components/Video';
 import About from './components/About';
+import Errors from './components/Errors'
 import { ReactComponent as LogoIcon } from './assets/film-solid.svg';
 
 import API_KEY from './secret'
@@ -16,28 +17,36 @@ class App extends React.PureComponent {
     searchResult: [],
     availableResults: '',
     targetVideoId: '',
-    alerts: false,
+    alert: false,
+    errorMessage: '',
   }
 
   handleError = err => {
-    console.log(err)
+    console.log('ERROR : ', err)
     if (err.response) {
       if (err.response.data.message) {
-          // toast.error(err.response.data.message,
-          //     { position: toast.POSITION.TOP_CENTER });
+        this.setState({
+          alert: true,
+          errorMessage: err.response.data.message
+        })
       } else {
-          // toast.error(`${err.response.data}: ${err.response.status} - ${err.response.statusText}`,
-          // { position: toast.POSITION.TOP_CENTER });
-          console.log('Error', err);
+        this.setState({
+          alert: true,
+          errorMessage: `${err.response.data}: ${err.response.status} - ${err.response.statusText}`
+        })
       }
     } else if (err.message) {
-          // toast.error(err.message,
-          //     { position: toast.POSITION.TOP_CENTER });
+      this.setState({
+        alert: true,
+        errorMessage: err.message
+      })
     } else {
-          // toast.error('Sorry, an error occurred, try again later',
-          //     { position: toast.POSITION.TOP_CENTER });
-          // console.log('Error', err);
+      this.setState({
+        alert: true,
+        errorMessage: err.message
+      })
     }
+    console.log(this.state)
   }
 
   handleSearchForm = async(event) => {
@@ -64,12 +73,20 @@ class App extends React.PureComponent {
   }
 
   handleAlerts = () => {
-    this.setState({alerts: false})
-  }
+    this.setState({
+        alert: false,
+        errorMessage: ''
+    })
+}
 
   render() {
+    let errorContainer = null
+        if (this.state.alert) {
+            errorContainer = <Errors text={this.state.errorMessage} handleAlerts={this.handleAlerts} />
+        }
+
     return (
-      <div className="App ">
+      <div className='App position-relative'>
         <nav className='navbar navbar-expand-sm main-navbar navbar-light mb-4'>
           <ul className='navbar-nav'>
           </ul>
@@ -107,6 +124,7 @@ class App extends React.PureComponent {
             )} />
           <Route path='/about' component={About} />
         </Switch>
+        {errorContainer}
       </div>
     );
   }

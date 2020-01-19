@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import API_KEY from '../secret'
 import Comments from './Comments'
+import Errors from './Errors'
 
 
 export default class Video extends React.PureComponent {
@@ -12,6 +13,8 @@ export default class Video extends React.PureComponent {
         title: '',
         published: '',
         description: '',
+        alerts: false,
+        errorMessage: '',
     }
 
     async componentDidMount() {
@@ -31,9 +34,19 @@ export default class Video extends React.PureComponent {
         }
     }
 
+    handleAlerts = () => {
+        this.setState({
+            alert: false,
+            errorMessage: ''
+        })
+    }
+
 
     render() {
-        
+        let errorContainer = null
+        if (this.state.alert) {
+            errorContainer = <Errors text={this.state.errorMessage} handleAlerts={this.handleAlerts} />
+        }
 
         const opts = {
           playerVars: {
@@ -59,10 +72,11 @@ export default class Video extends React.PureComponent {
         return (
             <div className='container'>
                 {videoContent}
-                <span>{this.state.published}</span>
-                <h2>{this.state.title}</h2>
-                <p>{this.state.description}</p>
+                <span className='float-right'>{this.state.published}</span>
+                <h4>{this.state.title}</h4>
+                <div style={{height: '100px', overflow: 'scroll'}}>{this.state.description}</div>
                 {comments}
+                {errorContainer}
             </div>
         )
     }

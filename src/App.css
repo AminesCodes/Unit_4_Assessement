@@ -2,8 +2,14 @@
   text-align: center;
   color: aliceblue;
   background-image: linear-gradient(to bottom, rgb(53, 49, 49) , rgb(189, 187, 184));
-  overflow: scroll;
+  overflow: auto;
   position: relative;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  overflow: auto;
 }
 
 .icon {
@@ -20,8 +26,11 @@
 
 .errorDiv {
   position: absolute;
-  width: 65%;
-
+  width: 60%;
+  top: 10%;
+  margin: 0 20%;
+  background-color: cadetblue;
+  border-radius: 20px;
 }
 
 .closeBtn {
@@ -33,4 +42,9 @@
   position: sticky;
   background-image: linear-gradient(to right, rgb(179, 14, 14) , orange);
   color: aliceblue;
+}
+
+html, body {
+  height: 100%;
+  overflow: auto;
 }
