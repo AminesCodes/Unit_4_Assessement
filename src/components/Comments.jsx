@@ -79,8 +79,8 @@ export default class Comments extends React.PureComponent {
                         <button className='btn btn-primary mb-2'>Submit</button>
                     </form>
 
-                    {this.state.comments.map(comment => 
-                        <div key={comment.name+comment.comment}>
+                    {this.state.comments.map((comment, index) => 
+                        <div key={comment.name+comment.comment+index}>
                             <strong>{comment.name}: </strong>
                             <span>{comment.comment}</span>
                         </div>
@@ -94,8 +94,8 @@ export default class Comments extends React.PureComponent {
         }
 
         return (
-            <div className='container'>
-                <span className='cursorPointer float-right' onClick={this.handleShowComments}>
+            <div className='container-fluid float-div' style={{width: '100%'}}>
+                <span className='cursorPointer' onClick={this.handleShowComments}>
                     <CommentIcon className='icon' />
                     <span>{this.state.comments.length}</span>
                 </span>

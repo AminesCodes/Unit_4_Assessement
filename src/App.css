@@ -33,6 +33,14 @@
   border-radius: 20px;
 }
 
+.float-div {
+  position: relative;
+  width: 80%;
+  bottom: 0;
+  background-color: cadetblue;
+  border-radius: 20px;
+}
+
 .closeBtn {
   position: relative;
   right: 5px;
@@ -47,4 +55,12 @@
 html, body {
   height: 100%;
   overflow: auto;
+}
+
+a {
+  color: orange;
+  font-weight: bold;
+}
+a:hover {
+  color: red;
 }

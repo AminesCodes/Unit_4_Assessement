@@ -46,21 +46,22 @@ class App extends React.PureComponent {
         errorMessage: err.message
       })
     }
-    console.log(this.state)
   }
 
   handleSearchForm = async(event) => {
     event.preventDefault()
 
-    try {
-      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${this.state.search}&key=${API_KEY}`
-      const { data } = await axios.get(url)
-      this.setState({
-        availableResults: data.kind,
-        searchResult: data.items,
-      })
-    } catch (err) {
-      this.handleError(err)
+    if (this.state.search) {
+      try {
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${this.state.search}&key=${API_KEY}`
+        const { data } = await axios.get(url)
+        this.setState({
+          availableResults: data.kind,
+          searchResult: data.items,
+        })
+      } catch (err) {
+        this.handleError(err)
+      }
     }
   }
 

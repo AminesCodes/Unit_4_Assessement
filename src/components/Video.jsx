@@ -13,9 +13,36 @@ export default class Video extends React.PureComponent {
         title: '',
         published: '',
         description: '',
-        alerts: false,
+        alert: false,
         errorMessage: '',
     }
+
+    handleError = err => {
+        console.log('ERROR : ', err)
+        if (err.response) {
+          if (err.response.data.message) {
+            this.setState({
+              alert: true,
+              errorMessage: err.response.data.message
+            })
+          } else {
+            this.setState({
+              alert: true,
+              errorMessage: `${err.response.data}: ${err.response.status} - ${err.response.statusText}`
+            })
+          }
+        } else if (err.message) {
+          this.setState({
+            alert: true,
+            errorMessage: err.message
+          })
+        } else {
+          this.setState({
+            alert: true,
+            errorMessage: err.message
+          })
+        }
+      }
 
     async componentDidMount() {
         const fullUrl = (this.props.location.pathname).split('/')
@@ -29,8 +56,8 @@ export default class Video extends React.PureComponent {
                 published: new Date(data.items[0].snippet.publishedAt).toLocaleString(),
                 description: data.items[0].snippet.description,
             })
-        } catch {
-
+        } catch (err){
+            this.handleError(err)
         }
     }
 
@@ -72,7 +99,7 @@ export default class Video extends React.PureComponent {
         return (
             <div className='container'>
                 {videoContent}
-                <span className='float-right'>{this.state.published}</span>
+                <span className=''>{this.state.published}</span>
                 <h4>{this.state.title}</h4>
                 <div style={{height: '100px', overflow: 'scroll'}}>{this.state.description}</div>
                 {comments}
