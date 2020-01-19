@@ -7,6 +7,22 @@ import Video from './components/Video'
 import About from './components/About'
 
 class App extends React.PureComponent {
+  state = {
+    search: '',
+    result: []
+  }
+
+  handleSearchForm = async(event) => {
+    event.preventDefault()
+  }
+
+  handleInputField = event => {
+
+  }
+
+  handleInitSearch = () => {
+
+  }
 
   render() {
     return (
@@ -18,12 +34,18 @@ class App extends React.PureComponent {
         </nav>
   
         <Switch>             
-          <Route path='/video' render={props => (<Video {...props} />)} />
+          <Route path='/video' render={props => (
+                <Video {...props} />
+            )} />
           <Route path='/about' component={About} />
-          <Route path='/' render={props => (<Home {...props} />)} />
-          <Route path='/video' component={Video} />)} />
-          <Route path='/about' component={About} />
-          <Route path='/' component={Home} />)} />
+          <Route path='/' render={props => (
+                <Home 
+                  handleSearchForm = {this.handleSearchForm}
+                  inputValue = {this.state.search}
+                  handleInputField = {this.handleInputField}
+                  handleInitSearch = {this.handleInitSearch}
+                  {...props} />
+            )} />
         </Switch>
       </div>
     );
