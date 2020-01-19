@@ -13,18 +13,32 @@ export default class Comments extends React.PureComponent {
         errorMessage: '',
     }
 
+    async componentDidMount() {
+        // localStorage.clear()
+        const commentsArrStr = localStorage.getItem(`${this.props.videoId}`)
+        if (commentsArrStr) {
+            const commentStrToArr = commentsArrStr.split('@@##@@')
+            const commentArr = commentStrToArr.map(e => JSON.parse(e))
+            console.log(commentStrToArr)
+            await this.setState({comments: commentArr})
+        }
+    }
+
     handleCommentForm = event => {
         event.preventDefault()
 
         if (this.state.name && this.state.comment) {
             const comment = {
-                name: this.state.name,
-                comment: this.state.comment,
+                "name": this.state.name,
+                "comment": this.state.comment,
             }
 
             const allComments = [...this.state.comments]
             allComments.unshift(comment)
             this.setState({comments: allComments})
+            const commentsStrArr = allComments.map(e => JSON.stringify(e))
+            localStorage.setItem(`${this.props.videoId}`, commentsStrArr.join('@@##@@'));
+            console.log(this.state.comments)
         } else {
             this.setState({
                 alert: true,

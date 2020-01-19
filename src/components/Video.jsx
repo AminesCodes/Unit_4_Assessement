@@ -91,7 +91,7 @@ export default class Video extends React.PureComponent {
                     onReady={this._onReady}
                 />
             
-            comments = <Comments />
+            comments = <Comments videoId={this.state.videoId}/>
         }
 
 
