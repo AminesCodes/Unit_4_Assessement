@@ -19,7 +19,6 @@ export default class Comments extends React.PureComponent {
         if (commentsArrStr) {
             const commentStrToArr = commentsArrStr.split('@@##@@')
             const commentArr = commentStrToArr.map(e => JSON.parse(e))
-            console.log(commentStrToArr)
             await this.setState({comments: commentArr})
         }
     }
