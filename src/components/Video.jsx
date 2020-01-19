@@ -1,9 +1,14 @@
 import React from 'react'
+import axios from 'axios'
 
-export default function Video(props) {
-    return (
-        <div>
-            video
-        </div>
-    )
+
+export default class Video extends React.PureComponent {
+    render() {
+        return (
+            <div>
+                {this.props.videoId}
+            </div>
+        )
+
+    }
 }
