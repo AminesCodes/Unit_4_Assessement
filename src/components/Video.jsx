@@ -3,6 +3,7 @@ import YouTube from 'react-youtube'
 import axios from 'axios'
 
 import API_KEY from '../secret'
+import Comments from './Comments'
 
 
 export default class Video extends React.PureComponent {
@@ -11,7 +12,6 @@ export default class Video extends React.PureComponent {
         title: '',
         published: '',
         description: '',
-        comments: [],
     }
 
     async componentDidMount() {
@@ -20,7 +20,6 @@ export default class Video extends React.PureComponent {
         try {
             const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`
             const {data} = await axios.get(url)
-            console.log(data)
             this.setState({
                 videoId: videoId,
                 title: data.items[0].snippet.title,
@@ -43,14 +42,19 @@ export default class Video extends React.PureComponent {
         };
 
         let videoContent = null
+        let comments = null
         if (this.state.videoId) {
-            
             videoContent = <YouTube
                     videoId={this.state.videoId}
                     opts={opts}
+                    className='container'
                     onReady={this._onReady}
                 />
+            
+            comments = <Comments />
         }
+
+
      
         return (
             <div className='container'>
@@ -58,6 +62,7 @@ export default class Video extends React.PureComponent {
                 <span>{this.state.published}</span>
                 <h2>{this.state.title}</h2>
                 <p>{this.state.description}</p>
+                {comments}
             </div>
         )
     }

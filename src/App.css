@@ -1,3 +1,36 @@
 .App {
   text-align: center;
+  color: aliceblue;
+  background-image: linear-gradient(to bottom, rgb(53, 49, 49) , rgb(189, 187, 184));
+  overflow: scroll;
+  position: relative;
+}
+
+.icon {
+  z-index: 1;
+  height: 30px;
+  width: 30px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.cursorPointer:hover {
+  cursor: pointer;
+}
+
+.errorDiv {
+  position: absolute;
+  width: 65%;
+
+}
+
+.closeBtn {
+  position: relative;
+  right: 5px;
+}
+
+.main-navbar {
+  position: sticky;
+  background-image: linear-gradient(to right, rgb(179, 14, 14) , orange);
+  color: aliceblue;
 }

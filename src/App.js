@@ -6,6 +6,7 @@ import axios from 'axios';
 import Home from './components/Home';
 import Video from './components/Video';
 import About from './components/About';
+import { ReactComponent as LogoIcon } from './assets/film-solid.svg';
 
 import API_KEY from './secret'
 
@@ -62,13 +63,30 @@ class App extends React.PureComponent {
     this.setState({search: ''})
   }
 
+  handleAlerts = () => {
+    this.setState({alerts: false})
+  }
+
   render() {
     return (
-      <div className="App">
-        <nav>
-          <NavLink to='/'>Home</NavLink>
-          <NavLink to='/video'>Video</NavLink>
-          <NavLink to='about'>About</NavLink>
+      <div className="App ">
+        <nav className='navbar navbar-expand-sm main-navbar navbar-light mb-4'>
+          <ul className='navbar-nav'>
+          </ul>
+          <ul className='navbar-nav'>
+            <li className='nav-item float-left' >
+              <NavLink className='nav-link' to='/'><LogoIcon className='icon'/></NavLink>
+            </li>
+            <li className='nav-item' >
+              <NavLink className='nav-link' to='/'>Home</NavLink>
+            </li>
+            <li className='nav-item' >
+              <NavLink className='nav-link' to='/video'>Video</NavLink>
+            </li>
+            <li className='nav-item' >
+              <NavLink className='nav-link' to='about'>About</NavLink>
+            </li>
+          </ul>
         </nav>
   
         <Switch>             

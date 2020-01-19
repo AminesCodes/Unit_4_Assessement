@@ -13,9 +13,8 @@ export default function Home(props) {
     if (props.availableResults) {
       pageContent = props.searchResult.map(result => 
         <div className='col-sm-6'>
-            <Link className='col-sm-6' to={`/video/${result.id.videoId}`}>
+            <Link className='col-sm-6' to={`/video/${result.id.videoId}`} key={result.id.videoId+result.snippet.thumbnails.medium.url}>
             <VideoThumbnail onClick={e => props.handleVideoSelection(result.id.videoId)}
-                key={result.id.videoId+result.snippet.thumbnails.medium.url}
                 url={result.snippet.thumbnails.medium.url}
                 title={result.snippet.title}
                 id={result.id.videoId}
