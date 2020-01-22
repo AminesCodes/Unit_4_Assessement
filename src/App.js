@@ -92,7 +92,7 @@ class App extends React.PureComponent {
           </ul>
           <ul className='navbar-nav'>
             <li className='nav-item float-left' >
-              <NavLink className='nav-link' to='/'><LogoIcon className='icon'/></NavLink>
+              <NavLink className='nav-link' to='/'><LogoIcon className='icon'/>SimpleTube</NavLink>
             </li>
             <li className='nav-item' >
               <NavLink className='nav-link' to='/'>Home</NavLink>
