@@ -16,7 +16,6 @@ class App extends React.PureComponent {
     search: '',
     searchResult: [],
     availableResults: '',
-    targetVideoId: '',
     alert: false,
     errorMessage: '',
   }
@@ -102,7 +101,7 @@ class App extends React.PureComponent {
               <NavLink className='nav-link' to='/video'>Video</NavLink>
             </li>
             <li className='nav-item' >
-              <NavLink className='nav-link' to='about'>About</NavLink>
+              <NavLink className='nav-link' to='/about'>About</NavLink>
             </li>
           </ul>
         </nav>
@@ -118,11 +117,7 @@ class App extends React.PureComponent {
                   searchResult = {this.state.searchResult}
                   {...props} />
             )} />
-          <Route path='/video' render={props => (
-                <Video 
-                  videoId = {this.state.targetVideoId}
-                  {...props} />
-            )} />
+          <Route path='/video' component={Video} />
           <Route path='/about' component={About} />
         </Switch>
         {errorContainer}

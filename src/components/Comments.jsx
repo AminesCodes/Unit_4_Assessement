@@ -28,8 +28,8 @@ export default class Comments extends React.PureComponent {
 
         if (this.state.name && this.state.comment) {
             const comment = {
-                "name": this.state.name,
-                "comment": this.state.comment,
+                name: this.state.name,
+                comment: this.state.comment,
             }
 
             const allComments = [...this.state.comments]
