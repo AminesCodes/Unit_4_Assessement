@@ -40,7 +40,7 @@ export default class Video extends React.PureComponent {
         } else {
           this.setState({
             alert: true,
-            errorMessage: err.message
+            errorMessage: err
           })
         }
       }
