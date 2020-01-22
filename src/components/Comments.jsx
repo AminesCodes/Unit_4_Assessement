@@ -37,6 +37,11 @@ export default class Comments extends React.PureComponent {
             this.setState({comments: allComments})
             const commentsStrArr = allComments.map(e => JSON.stringify(e))
             localStorage.setItem(`${this.props.videoId}`, commentsStrArr.join('@@##@@'));
+
+            this.setState({
+                name: '',
+                comment: '',
+            })
         } else {
             this.setState({
                 alert: true,

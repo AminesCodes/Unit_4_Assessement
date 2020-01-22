@@ -105,9 +105,9 @@ export default class Video extends React.PureComponent {
                 {videoContent}
                 <span className=''>{this.state.published}</span>
                 <h4>{this.state.title}</h4>
-                <div style={{height: '100px', overflow: 'scroll'}}>{this.state.description}</div>
                 {comments}
                 {errorContainer}
+                <div style={{height: '100px', overflow: 'scroll'}}>{this.state.description}</div>
             </div>
         )
     }
