@@ -29,14 +29,13 @@
   width: 60%;
   top: 10%;
   margin: 0 20%;
-  background-color: cadetblue;
+  background-color: lightgoldenrodyellow;
   border-radius: 20px;
+  color: black;
+  font-weight: bold;
 }
 
 .float-div {
-  position: relative;
-  width: 80%;
-  bottom: 0;
   background-color: cadetblue;
   border-radius: 20px;
 }

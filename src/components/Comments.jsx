@@ -37,7 +37,6 @@ export default class Comments extends React.PureComponent {
             this.setState({comments: allComments})
             const commentsStrArr = allComments.map(e => JSON.stringify(e))
             localStorage.setItem(`${this.props.videoId}`, commentsStrArr.join('@@##@@'));
-            console.log(this.state.comments)
         } else {
             this.setState({
                 alert: true,
@@ -69,6 +68,10 @@ export default class Comments extends React.PureComponent {
 
     render() {
         let commentsContainer = null
+        let commentsContainerStyle = {
+            width: '100%',
+            position: 'relative'
+        }
         if (this.state.displayComments) {
             commentsContainer = 
                 <>
@@ -99,6 +102,13 @@ export default class Comments extends React.PureComponent {
                         </div>
                     )}
                 </>
+                commentsContainerStyle = {
+                    width: '80%',
+                    position: 'absolute',
+                    top: '40%',
+                    right: '10%',
+                    left: '10%'
+                }
         }
 
         let errorMessage = null
@@ -107,7 +117,7 @@ export default class Comments extends React.PureComponent {
         }
 
         return (
-            <div className='container-fluid float-div' style={{width: '100%'}}>
+            <div className='container-fluid float-div' style={commentsContainerStyle}>
                 <span className='cursorPointer' onClick={this.handleShowComments}>
                     <CommentIcon className='icon' />
                     <span>{this.state.comments.length}</span>
