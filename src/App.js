@@ -13,7 +13,7 @@ import API_KEY from './secret'
 
 class App extends React.PureComponent {
   state = {
-    search: '',
+    searchTerm: '',
     searchResult: [],
     availableResults: '',
     alert: false,
@@ -50,9 +50,9 @@ class App extends React.PureComponent {
   handleSearchForm = async(event) => {
     event.preventDefault()
 
-    if (this.state.search) {
+    if (this.state.searchTerm) {
       try {
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${this.state.search}&key=${API_KEY}`
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${this.state.searchTerm}&key=${API_KEY}`
         const { data } = await axios.get(url)
         this.setState({
           availableResults: data.kind,
@@ -65,11 +65,11 @@ class App extends React.PureComponent {
   }
 
   handleInputField = event => {
-    this.setState({search: event.target.value})
+    this.setState({searchTerm: event.target.value})
   }
 
   handleInitSearch = () => {
-    this.setState({search: ''})
+    this.setState({searchTerm: ''})
   }
 
   handleAlerts = () => {
@@ -110,7 +110,7 @@ class App extends React.PureComponent {
           <Route exact path='/' render={props => (
                 <Home 
                   handleSearchForm = {this.handleSearchForm}
-                  inputValue = {this.state.search}
+                  inputValue = {this.state.searchTerm}
                   handleInputField = {this.handleInputField}
                   handleInitSearch = {this.handleInitSearch}
                   availableResults = {this.state.availableResults}
