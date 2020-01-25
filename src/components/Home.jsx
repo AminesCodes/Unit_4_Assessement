@@ -45,12 +45,18 @@ export default function Home(props) {
             } catch (err) {
               handleError(err)
             }
-          }
+        }
     }
 
     useEffect(() => {
-        getSearchResults((props.location.search).split('?$earch=')[1])
-      }, []);
+        const searchWord = (props.location.search).split('?$earch=')[1]
+        console.log(searchWord)
+        if (searchWord) {
+            getSearchResults(searchWord)
+        } else {
+            setAvailableResults('')
+        }
+      }, [props.location.search]);
     
     const handleSearchForm = event => {
         event.preventDefault()
@@ -58,6 +64,8 @@ export default function Home(props) {
         if (searchTerm) {
             props.history.push(`?$earch=${searchTerm}`);
             getSearchResults(searchTerm)
+        } else {
+            setAvailableResults('')
         }
     }
     

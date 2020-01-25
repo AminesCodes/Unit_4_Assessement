@@ -1,4 +1,4 @@
-import React, {useState, useEffect}  from 'react'
+import React, {useState, useEffect} from 'react'
 import YouTube from 'react-youtube'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -55,7 +55,7 @@ export default function Video (props) {
         if (video_Id) {
           getVideoInfo(video_Id)
         }
-  }, [])
+  }, [props.location.pathname])
 
   const handleAlerts = () => {
       setAlert(false)
