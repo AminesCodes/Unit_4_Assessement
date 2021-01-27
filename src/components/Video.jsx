@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import YouTube from 'react-youtube'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -8,111 +8,99 @@ import Comments from './Comments'
 import Errors from './Errors'
 
 
-export default class Video extends React.PureComponent {
-    state = {
-        videoId: '',
-        title: '',
-        published: '',
-        description: '',
-        alert: false,
-        errorMessage: '',
-    }
+export default function Video (props) {
+  const [ videoId, setVideoId ] = useState('')
+  const [ title, setTitle ] = useState('')
+  const [ published, setPublished ] = useState('')
+  const [ description, setDescription ] = useState('')
+  const [ alert, setAlert ] = useState(false)
+  const [ errorMessage, setErrorMessage ] = useState('')
 
-    handleError = err => {
-        console.log('ERROR : ', err)
-        if (err.response) {
-          if (err.response.data.message) {
-            this.setState({
-              alert: true,
-              errorMessage: err.response.data.message
-            })
-          } else {
-            this.setState({
-              alert: true,
-              errorMessage: `${err.response.data}: ${err.response.status} - ${err.response.statusText}`
-            })
-          }
-        } else if (err.message) {
-          this.setState({
-            alert: true,
-            errorMessage: err.message
-          })
-        } else {
-          this.setState({
-            alert: true,
-            errorMessage: err
-          })
-        }
+  const handleError = err => {
+    console.log('ERROR : ', err)
+    if (err.response) {
+      if (err.response.data.message) {
+          setAlert(true)
+          setErrorMessage(err.response.data.message)
+      } else {
+            setAlert(true)
+            setErrorMessage(`${err.response.data}: ${err.response.status} - ${err.response.statusText}`)
       }
-
-    async componentDidMount() {
-        const fullUrl = (this.props.location.pathname).split('/')
-        const videoId = fullUrl.slice(2).join('/') // IN CASE THE VIDEO ID HAS A '/'
-
-        if (videoId) {
-            try {
-                const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`
-                const {data} = await axios.get(url)
-                this.setState({
-                    videoId: videoId,
-                    title: data.items[0].snippet.title,
-                    published: new Date(data.items[0].snippet.publishedAt).toLocaleString(),
-                    description: data.items[0].snippet.description,
-                })
-            } catch (err){
-                this.handleError(err)
-            }
-        }
+    } else if (err.message) {
+        setAlert(true)
+        setErrorMessage(err.message)
+    } else {
+        setAlert(true)
+        setErrorMessage(err)
     }
+  }
 
-    handleAlerts = () => {
-        this.setState({
-            alert: false,
-            errorMessage: ''
-        })
+  const getVideoInfo = async (id) => {
+    try {
+      const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${id}&key=${API_KEY}`
+      const {data} = await axios.get(url)
+      setVideoId(id)
+      setTitle(data.items[0].snippet.title)
+      setPublished(new Date(data.items[0].snippet.publishedAt).toLocaleString())
+      setDescription(data.items[0].snippet.description)
+    } catch (err){
+      handleError(err)
     }
+  }
 
+  useEffect(() => {
+        const fullUrl = (props.location.pathname).split('/')
+        const video_Id = fullUrl.slice(2).join('/') // IN CASE THE VIDEO ID HAS A '/'
 
-    render() {
-        let errorContainer = null
-        if (this.state.alert) {
-            errorContainer = <Errors text={this.state.errorMessage} handleAlerts={this.handleAlerts} />
+        if (video_Id) {
+          getVideoInfo(video_Id)
         }
+  }, [props.location.pathname])
 
-        const opts = {
-          playerVars: {
-            autoplay: 0
-          }
-        };
-
-        let videoContent = <p>No Video Selected... Please search for one <Link to='/'>HERE</Link></p>
-        let comments = null
-        if (this.state.videoId) {
-            videoContent = <YouTube
-                    videoId={this.state.videoId}
-                    opts={opts}
-                    className='container'
-                    onReady={this._onReady}
-                />
-            
-            comments = <Comments videoId={this.state.videoId}/>
-        }
+  const handleAlerts = () => {
+      setAlert(false)
+      setErrorMessage('')
+  }
 
 
+  let errorContainer = null
+  if (alert) {
+      errorContainer = <Errors text={errorMessage} handleAlerts={handleAlerts} />
+  }
+
+  const opts = {
+    playerVars: {
+      autoplay: 0
+    }
+  };
+
+  let videoContent = <p>No Video Selected... Please search for one <Link to='/'>HERE</Link></p>
+  let comments = null
+  if (videoId) {
+      videoContent = <YouTube
+              videoId={videoId}
+              opts={opts}
+              className='container'
+              onReady={(event) => { event.target.pauseVideo()}}
+          />
+      
+      comments = <Comments videoId={videoId}/>
+  }
+
+
+
+  return (
+      <div className='container'>
+          {videoContent}
+          <span className=''>{published}</span>
+          <h4>{title}</h4>
+          {comments}
+          {errorContainer}
+          <div style={{height: '100px', overflow: 'scroll'}}>{description}</div>
+      </div>
+  )
      
-        return (
-            <div className='container'>
-                {videoContent}
-                <span className=''>{this.state.published}</span>
-                <h4>{this.state.title}</h4>
-                {comments}
-                {errorContainer}
-                <div style={{height: '100px', overflow: 'scroll'}}>{this.state.description}</div>
-            </div>
-        )
-    }
-     
-    _onReady(event) {
-        event.target.pauseVideo();
-    }
+    // _onReady(event) {
+    //     event.target.pauseVideo();
+    // }
 }

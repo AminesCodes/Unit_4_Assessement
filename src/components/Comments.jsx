@@ -1,135 +1,115 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 import Errors from './Errors'
 import { ReactComponent as CommentIcon } from '../assets/comment-alt-regular.svg';
 
-export default class Comments extends React.PureComponent {
-    state = {
-        name: '',
-        comment: '',
-        comments: [],
-        displayComments: false,
-        alert: false,
-        errorMessage: '',
-    }
+export default function Comments(props) {
+    const [ userName, setName ] = useState('')
+    const [ commentText, setComment ] = useState('')
+    const [ comments, setComments ] = useState([])
+    const [ displayComments, setDisplayComments ] = useState(false)
+    const [ alert, setAlert ] = useState(false)
+    const [ errorMessage, setErrorMessage ] = useState('')
 
-    async componentDidMount() {
+    useEffect(() => {
         // localStorage.clear()
-        const commentsArrStr = localStorage.getItem(`${this.props.videoId}`)
+        const commentsArrStr = localStorage.getItem(`${props.videoId}`)
         if (commentsArrStr) {
             const commentStrToArr = commentsArrStr.split('@@##@@')
             const commentArr = commentStrToArr.map(e => JSON.parse(e))
-            await this.setState({comments: commentArr})
+            setComments(commentArr)
         }
-    }
+    }, []) 
 
-    handleCommentForm = event => {
+    const handleCommentForm = event => {
         event.preventDefault()
 
-        if (this.state.name && this.state.comment) {
+        if (userName && commentText) {
             const comment = {
-                name: this.state.name,
-                comment: this.state.comment,
+                name: userName,
+                comment: commentText,
             }
 
-            const allComments = [...this.state.comments]
-            allComments.unshift(comment)
-            this.setState({comments: allComments})
-            const commentsStrArr = allComments.map(e => JSON.stringify(e))
-            localStorage.setItem(`${this.props.videoId}`, commentsStrArr.join('@@##@@'));
+            comments.unshift(comment)
+            setComments(comments)
+            const commentsStrArr = comments.map(e => JSON.stringify(e))
+            localStorage.setItem(`${props.videoId}`, commentsStrArr.join('@@##@@'));
 
-            this.setState({
-                name: '',
-                comment: '',
-            })
+            setName('');
+            setComment('')
         } else {
-            this.setState({
-                alert: true,
-                errorMessage: 'Both fields are required'
-            })
+            setAlert(true)
+            setErrorMessage('Both fields are required')
         }
     }
 
-    handleNameInput = event => {
-        this.setState({name: event.target.value})
+    const handleAlerts = () => {
+        setAlert(false)
+        setErrorMessage('')
     }
 
-    handleCommentInput = event => {
-        this.setState({comment: event.target.value})
+    const handleShowComments = () => {
+        setDisplayComments(!displayComments)
+    }
+    
+    
+    let commentsContainer = null
+    let commentsContainerStyle = {
+        width: '100%',
+        position: 'relative'
+    }
+    if (displayComments) {
+        commentsContainer = 
+            <>
+                <form className='form-inline' onSubmit={handleCommentForm}>
+                    <label htmlFor='name' className='mr-sm-2'>Name:</label>
+                    <input 
+                        type='text' 
+                        className='form-control mb-2 mr-sm-2' 
+                        id='name' 
+                        value={userName}
+                        onChange={e => setName(e.target.value)}
+                    />
+                    <label htmlFor='comment' className='mr-sm-2'>Comment:</label>
+                    <input 
+                        type='text' 
+                        className='form-control mb-2 mr-sm-2' 
+                        id='comment' 
+                        value={commentText}
+                        onChange={e => setComment(e.target.value)}
+                    />
+                    <button className='btn btn-primary mb-2'>Submit</button>
+                </form>
+
+                {comments.map((comment, index) => 
+                    <div key={comment.name+comment.comment+index}>
+                        <strong>{comment.name}: </strong>
+                        <span>{comment.comment}</span>
+                    </div>
+                )}
+            </>
+            commentsContainerStyle = {
+                width: '80%',
+                position: 'absolute',
+                top: '40%',
+                right: '10%',
+                left: '10%'
+            }
     }
 
-
-    handleShowComments = () => {
-        this.setState({ displayComments: !this.state.displayComments })
+    let errorMessageDiv = null
+    if (alert) {
+        errorMessageDiv = <Errors text={errorMessage} handleAlerts={handleAlerts} />
     }
 
-    handleAlerts = () => {
-        this.setState({
-            alert: false,
-            errorMessage: ''
-        })
-    }
-
-
-    render() {
-        let commentsContainer = null
-        let commentsContainerStyle = {
-            width: '100%',
-            position: 'relative'
-        }
-        if (this.state.displayComments) {
-            commentsContainer = 
-                <>
-                    <form className='form-inline' onSubmit={this.handleCommentForm}>
-                        <label htmlFor='name' className='mr-sm-2'>Name:</label>
-                        <input 
-                            type='text' 
-                            className='form-control mb-2 mr-sm-2' 
-                            id='name' 
-                            value={this.state.name}
-                            onChange={this.handleNameInput}
-                        />
-                        <label htmlFor='comment' className='mr-sm-2'>Comment:</label>
-                        <input 
-                            type='text' 
-                            className='form-control mb-2 mr-sm-2' 
-                            id='comment' 
-                            value={this.state.comment}
-                            onChange={this.handleCommentInput}
-                        />
-                        <button className='btn btn-primary mb-2'>Submit</button>
-                    </form>
-
-                    {this.state.comments.map((comment, index) => 
-                        <div key={comment.name+comment.comment+index}>
-                            <strong>{comment.name}: </strong>
-                            <span>{comment.comment}</span>
-                        </div>
-                    )}
-                </>
-                commentsContainerStyle = {
-                    width: '80%',
-                    position: 'absolute',
-                    top: '40%',
-                    right: '10%',
-                    left: '10%'
-                }
-        }
-
-        let errorMessage = null
-        if (this.state.alert) {
-            errorMessage = <Errors text={this.state.errorMessage} handleAlerts={this.handleAlerts} />
-        }
-
-        return (
-            <div className='container-fluid float-div' style={commentsContainerStyle}>
-                <span className='cursorPointer' onClick={this.handleShowComments}>
-                    <CommentIcon className='icon' />
-                    <span>{this.state.comments.length}</span>
-                </span>
-                {commentsContainer}
-                {errorMessage}
-            </div>
-        )
-    }
+    return (
+        <div className='container-fluid float-div' style={commentsContainerStyle}>
+            <span className='cursorPointer' onClick={handleShowComments}>
+                <CommentIcon className='icon' />
+                <span>{comments.length}</span>
+            </span>
+            {commentsContainer}
+            {errorMessageDiv}
+        </div>
+    )
 }

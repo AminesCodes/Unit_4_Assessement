@@ -10,7 +10,6 @@ import { ReactComponent as LogoIcon } from './assets/film-solid.svg';
 
 
 const App = () => {
-
   return (
     <div className='App position-relative'>
       <nav className='navbar navbar-expand-sm main-navbar navbar-light mb-4'>
@@ -32,17 +31,8 @@ const App = () => {
         </ul>
       </nav>
 
-      <Switch>             
-        <Route exact path='/' render={props => (
-              <Home 
-                handleSearchForm = {this.handleSearchForm}
-                inputValue = {this.state.searchTerm}
-                handleInputField = {this.handleInputField}
-                handleInitSearch = {this.handleInitSearch}
-                availableResults = {this.state.availableResults}
-                searchResult = {this.state.searchResult}
-                {...props} />
-          )} />
+      <Switch> 
+        <Route exact path='/' component={Home} />
         <Route path='/video' component={Video} />
         <Route path='/about' component={About} />
       </Switch>
